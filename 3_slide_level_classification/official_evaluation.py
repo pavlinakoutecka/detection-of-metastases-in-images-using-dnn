@@ -16,8 +16,6 @@ import pandas as pd
 import os
 from os import path
 
-import cv2 # potizak
-
 import sys
 import pathlib
 parent_path = str(pathlib.Path().absolute().parent)
@@ -51,10 +49,11 @@ def computeEvaluationMask(slideDIR, xmlDIR, resolution, level):
     # pixelarray = np.array(slide.read_region((0,0), level, dims))
     # distance = nd.distance_transform_edt(255 - pixelarray[:,:,0])
 
-    Threshold = 75/(resolution * pow(2, level) * 2) # 75µm is the equivalent size of 5 tumor cells
+    Threshold = 75/(resolution * pow(2, level) * 2)  # 75µm is the equivalent size of 5 tumor cells
     binary = distance < Threshold
     filled_image = nd.morphology.binary_fill_holes(binary)
     evaluation_mask = measure.label(filled_image, connectivity = 2)
+
     return evaluation_mask
 
 
@@ -181,6 +180,7 @@ def compute_FP_TP_Probs(Ycorr, Xcorr, Probs, is_tumor, evaluation_mask, Isolated
             FP_counter+=1
 
     num_of_tumors = max_label - len(Isolated_Tumor_Cells);
+
     return FP_probs, TP_probs, num_of_tumors, detection_summary, FP_summary
 
 
@@ -234,13 +234,13 @@ def plotFROC(total_FPs, total_sensitivity, FROC_score):
     plt.plot(total_FPs, total_sensitivity, '-', color='#000000', label='FROC curve (Final score = {:.4f}'.format(FROC_score))
     plt.legend(loc='lower right')
     plt.grid(which='both')
-    plt.savefig(cfg.path.images + 'Evaluation_FROC.png')
+    plt.savefig(cfg.path.graphs + f'Evaluation_FROC_lvl_{cfg.hyperparameter.patch_level}.png')
     plt.show()
 
 
 def evaluationFROC():
 
-    result_folder = cfg.path.evaluate + 'csv_files/'
+    result_folder = cfg.path.evaluate_slide + 'csv_files/'
     slide_folder = cfg.path.c16_testing
     xml_folder = cfg.path.c16_annotations
 
@@ -282,6 +282,7 @@ def evaluationFROC():
         FP_summary[0][caseNum] = case
         detection_summary[0][caseNum] = case
         FROC_data[1][caseNum], FROC_data[2][caseNum], FROC_data[3][caseNum], detection_summary[1][caseNum], FP_summary[1][caseNum] = compute_FP_TP_Probs(Ycorr, Xcorr, Probs, is_tumor, evaluation_mask, ITC_labels, EVALUATION_MASK_LEVEL)
+
         caseNum += 1
 
     # compute FROC curve
@@ -304,10 +305,18 @@ def evaluationFROC():
                                                                                                total_sensitivity[index_4], total_sensitivity[index_8]))
     print(f"\nFinal FROC score = {FROC_score}")
 
+    # file = open(cfg.hyperparameter.saving_folder + cfg.hyperparameter.threshold_saving_string, "a")
+    # file.write("\nFPs/WSI \t 1/4 \t\t 1/2 \t\t 1 \t\t 2 \t\t 4 \t\t 8\n")
+    # file.write("Sensitivity \t {:.4f} \t {:.4f} \t {:.4f} \t {:.4f} \t {:.4f} \t {:.4f} \t \n".format(total_sensitivity[index_quarter], total_sensitivity[index_half],
+    #                                                                                            total_sensitivity[index_1], total_sensitivity[index_2],
+    #                                                                                            total_sensitivity[index_4], total_sensitivity[index_8]))
+    # file.write(f"\nFinal FROC score = {FROC_score}\n\n")
+    # file.close()
+
     # plot FROC curve
     plotFROC(total_FPs, total_sensitivity, FROC_score)
 
     # save FROC curve
     raw_data = {'total_FPs': total_FPs, 'X total_sensitivity': total_sensitivity, 'FROC_score': FROC_score}
     df = pd.DataFrame(raw_data)
-    df.to_csv(cfg.hyperparameter.saving_folder + f'FROC_data_lvl_{cfg.hyperparameter.patch_level}.csv', header=True, index=False, sep=',')
+    df.to_csv(cfg.path.saving_folder + f'FROC_data_lvl_{cfg.hyperparameter.patch_level}.csv', header=True, index=False, sep=',')

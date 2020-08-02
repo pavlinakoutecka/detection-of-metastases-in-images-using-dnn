@@ -43,7 +43,7 @@ def save_masks_c16(slides_folder, annotations_folder, masks_folder, mask_level):
         print("Generating masks of the slide ", slide, end='\r')
 
         # check if the slide is not corrupted
-        if slide in (cfg.wsi.c16_error_train_slides or cfg.wsi.c16_error_test_slides):
+        if slide in cfg.wsi.c16_error_slides:
             print("Warning! Slide", slide, "is corrupted. Continuing with another slide.")
             continue
 

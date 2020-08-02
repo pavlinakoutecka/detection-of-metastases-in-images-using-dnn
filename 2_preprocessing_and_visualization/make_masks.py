@@ -148,7 +148,7 @@ def make_tumor_boundaries_mask(slide_path, xml_path, tumor_boundaries_mask_path,
 
     # draw boundary of tumor in slide map
     for polygon_coordinates in polygon_list:
-        cv2.drawContours(boundaries_mask, np.array([polygon_coordinates]), -1, (0, 255, 0, 1), 2)
+        cv2.drawContours(boundaries_mask, np.array([polygon_coordinates]), -1, (0, 255, 0, 1), 5)
         if tumor_boundaries_mask_path:
             cv2.imwrite(tumor_boundaries_mask_path, boundaries_mask)
 
@@ -237,3 +237,6 @@ make_tumor_boundaries_mask(cfg.path.demo_slide, cfg.path.demo_xml, cfg.path.prep
 make_tissue_region_mask(cfg.path.demo_slide, cfg.path.demo_xml, cfg.path.preprocessing_and_visualization + 'tissue_region_mask.png', cfg.hyperparameter.mask_level)
 make_normal_mask(cfg.path.demo_slide, cfg.path.demo_xml, cfg.path.preprocessing_and_visualization + 'normal_mask.png', cfg.hyperparameter.mask_level)
 """
+
+make_slide_mask(cfg.path.demo_slide, cfg.path.demo_xml, cfg.path.preprocessing_and_visualization + 'slide_mask2.png', 4)
+make_tumor_boundaries_mask(cfg.path.demo_slide, cfg.path.demo_xml, cfg.path.preprocessing_and_visualization + 'tumor_boundaries2.png', 4)

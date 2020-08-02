@@ -1,26 +1,27 @@
 """
-File:           evaluate_slide.py
+File:           generate_maps.py
 Author:         Pavlina Koutecka
 Date:           20/04/2020
-Description:    This file aims to evaluate, visualize and return results of the trained model. It automatically
-                loads CAMELYON16 test slides and slice it to the patches both from tumor and non-tumor region. After that,
-                it evaluates model's predicted probability of every pixel being tumor.
+Description:    This file aims to evaluate, visualize and return tumor probability maps as the result of the trained model.
+                It automatically loads slides and slice it to the patches both from tumor and non-tumor region. After that,
+                it evaluates model's predicted probability of every pixel being tumor and stores it into .npy file.
 
-                After the evaluation, this file also visualizes results of the evaluation. It stores .png files with various visualizations:
+                After the evaluation, this file also visualizes results of the evaluation. It stores .png files with various
+                visualizations:
 
                     > predicted tumor mask - visualized as BW mask --> black...no tumor, white...tumor
                     > tumor heatmap - visualizes probability of every pixel being tumor as RGB map
-                    > visualization of TP/FP/TN/FN metric - visualized as coloured masks over the original slide
+                    > visualization of TP/FP/TN/FN metric with grid - visualized as coloured masks over the original slide with grid over
+                      all the patches that were processed during the evaluation part
                     > grid visualization with undetected tumor region - visualizes grid over all the patches that were processed during the
                       evaluation part; also highlights region of the undetected tumor (due to the inaccurate tissue detection algorithm).
 """
 
+
 import os
-import time
 from os import path
 import openslide
 import numpy as np
-import pandas as pd
 import cv2
 import random
 from datetime import datetime
@@ -151,6 +152,9 @@ def evaluate_slide():
     eval_dataset = train_utils.EvalDataset(patches, transform)
     eval_loader = DataLoader(eval_dataset, batch_size=cfg.hyperparameter.batch_size, shuffle=False, num_workers=cfg.hyperparameter.num_workers)
 
+    # turn the model to validation mode
+    model.eval()
+
     # disable gradient computation
     with torch.no_grad():
 
@@ -166,8 +170,8 @@ def evaluate_slide():
 
             # transform the model's prediction to required format and append it to the results array
             for k in range(len(outputs)):
-                predicted = 255 * outputs[k][1].cpu().numpy()
-                results.append(predicted)
+                predicted = 255 * outputs[k][1]
+                results.append(predicted.cpu().numpy())
 
     # write evaluated prediction of every patch to the tumor location mask
     for k in range(0, len(coordinates)):
@@ -223,6 +227,9 @@ def metric_visualization():
     final_metric_visualization = cv2.addWeighted(src1=final_metric_visualization, alpha=1, src2=TN_highlighted, beta=0.5, gamma=0)
     final_metric_visualization = cv2.addWeighted(src1=final_metric_visualization, alpha=1, src2=FN_highlighted, beta=0.5, gamma=0)
 
+    # create grid visualization (draws squares around patches that are processed during the evaluation)
+    final_metric_visualization = grid_visualization(final_metric_visualization)
+
     return final_metric_visualization
 
 
@@ -253,17 +260,18 @@ def undetected_tumor_visualization():
     final_undetected_tumor_visualization = cv2.addWeighted(src1=slide_mask, alpha=1, src2=undetected_tumor_highlighted, beta=0.5, gamma=0)
     cv2.drawContours(final_undetected_tumor_visualization, contours, -1, (0, 255, 255), 2)
 
+    # create grid visualization (draws squares around patches that are processed during the evaluation)
+    final_undetected_tumor_visualization = grid_visualization(final_undetected_tumor_visualization)
+
     return final_undetected_tumor_visualization
 
 
 def grid_visualization(slide_to_grid):
     """
-    This function visualizes grid over all the patches that were processed during the evaluation part. The grid
-    is drawn over the slide with highlighted region of the undetected tumor (due to the inaccurate tissue detection
-    algorithm).
+    This function visualizes grid over all the patches that were processed during the evaluation part.
 
-    :param slide_to_grid: slide to make grid on (with undetected tumor)
-    :return: final visualization of the grid (with undetected tumor)
+    :param slide_to_grid: slide to make grid on
+    :return: final visualization of the grid
     """
 
     # prepare slide to make grid on
@@ -286,7 +294,18 @@ def grid_visualization(slide_to_grid):
 
 if __name__ == "__main__":
 
-    print("Creating .png and .csv files with tumor probability maps...")
+    print("Generating tumor-likelihood maps and creating .npy file and visualizations...")
+
+    # print evaluation info
+    print(f'\n--- Date: {cfg.hyperparameter.date}\n'
+          f'--- Model: {cfg.hyperparameter.model}\n'
+          f'--- Pretrained: {cfg.hyperparameter.pretrained}\n'
+          f'--- Loaded weights: {cfg.hyperparameter.trained_weights}\n'
+          f'--- Patch level: {cfg.hyperparameter.patch_level}\n'
+          f'--- Mask level: {cfg.hyperparameter.mask_level}\n'
+          f'--- Patch size: {cfg.hyperparameter.patch_size}\n'
+          f'--- Learning rate: {cfg.hyperparameter.learning_rate}\n'
+          f'--- Threshold area: {cfg.hyperparameter.threshold_area}\n')
 
     args = utils.parse_args()
 
@@ -314,89 +333,140 @@ if __name__ == "__main__":
     # turn the model to validation mode
     model.eval()
 
-    # create list of all the available test slides and corresponding .xml files
-    slides_folder = cfg.path.c16_testing
-    annotations_folder = cfg.path.c16_annotations
+    # create list of all the available slides and corresponding .xml files and evaluate folders
+    if args.data == 'c16_test':  # CAMELYON16 challenge --> evaluate test slides (annotations are available)
+        slides_folder = cfg.path.c16_testing
+        annotations_folder = cfg.path.c16_annotations
+        evaluate_folder = cfg.path.evaluate_slide
+    if args.data == 'c17_train':  # CAMELYON17 challenge --> evaluate train slides (annotations are available)
+        slides_folder = cfg.path.c17_training
+        annotations_folder = cfg.path.c17_annotations
+        evaluate_folder = cfg.path.evaluate_patient
+    if args.data == 'c17_test':  # CAMELYON17 challenge --> evaluate test slides (annotations are not available)
+        slides_folder = cfg.path.c17_testing
+        annotations_folder = None
+        evaluate_folder = cfg.path.evaluate_patient
     slides_list = [f for f in os.listdir(slides_folder) if path.isfile(path.join(slides_folder, f))]
 
-    # create tumor probability map for every CAMELYON16 test slide
-    for index, slide_name in enumerate(slides_list):
+    # if we are evaluating CAMELYON16 test data or CAMELYON17 train data
+    if args.data == 'c16_test' or args.data == 'c17_train':
 
-        utils.visualize_progress(index, len(slides_list))
+        # create tumor probability map for every slide
+        for index, slide_name in enumerate(slides_list):
 
-        # evaluate only required slides
-        if index < int(args.start):
-            continue
-        if index > int(args.end):
-            break
+            utils.visualize_progress(index, len(slides_list))
 
-        # check if the slide is not corrupted
-        if slide_name in cfg.wsi.c16_error_test_slides:
-            print("Warning! Slide", slide_name, "is corrupted. Continuing with next slide.")
-            continue
+            # evaluate only required slides
+            if index < int(args.start):
+                continue
+            if index > int(args.end):
+                break
 
-        # prepare all the slide necessities
-        slide = openslide.OpenSlide(slides_folder + slide_name)
-        patch_level_factor = float(slide.level_downsamples[cfg.hyperparameter.patch_level])
-        mask_level_factor = float(slide.level_downsamples[cfg.hyperparameter.mask_level])
-        patch_width, patch_height = slide.level_dimensions[cfg.hyperparameter.patch_level]
-        mask_width, mask_height = slide.level_dimensions[cfg.hyperparameter.mask_level]
+            # check if the slide is not corrupted
+            if slide_name in cfg.wsi.c16_error_slides or slide_name in cfg.wsi.c17_error_slides:
+                print("Warning! Slide", slide_name, "is corrupted. Continuing with next slide.")
+                continue
 
-        # prepare downsampled version of the slide image
-        slide_mask = make_masks.make_slide_mask(slides_folder + slide_name, None, None, cfg.hyperparameter.mask_level)
+            # prepare all the slide necessities
+            slide = openslide.OpenSlide(slides_folder + slide_name)
+            patch_level_factor = float(slide.level_downsamples[cfg.hyperparameter.patch_level])
+            mask_level_factor = float(slide.level_downsamples[cfg.hyperparameter.mask_level])
+            patch_width, patch_height = slide.level_dimensions[cfg.hyperparameter.patch_level]
+            mask_width, mask_height = slide.level_dimensions[cfg.hyperparameter.mask_level]
 
-        # prepare tissue region mask
-        tissue_region_mask = make_masks.make_tissue_region_mask(slides_folder + slide_name, None, None, cfg.hyperparameter.mask_level)
+            # prepare downsampled version of the slide image
+            slide_mask = make_masks.make_slide_mask(slides_folder + slide_name, None, None, cfg.hyperparameter.mask_level)
 
-        # format the name of the slide to correspond its annotation
-        dic = {'T': 't', '.tif': '.xml'}
-        formatted_slide_name = slide_name
-        for i, j in dic.items():
-            formatted_slide_name = formatted_slide_name.replace(i, j)
+            # prepare tissue region mask
+            tissue_region_mask = make_masks.make_tissue_region_mask(slides_folder + slide_name, None, None, cfg.hyperparameter.mask_level)
 
-        # prepare tumor mask and normal (non-tumor) mask
-        try:  # if the slide contains annotated tumor region, create tumor mask and normal (non-tumor) mask
-            tumor_mask = make_masks.make_tumor_mask(slides_folder + slide_name, annotations_folder + formatted_slide_name, None, cfg.hyperparameter.mask_level)
-            normal_mask = make_masks.make_normal_mask(slides_folder + slide_name, annotations_folder + formatted_slide_name, None, cfg.hyperparameter.mask_level)
-        except:  # otherwise create empty tumor mask; normal mask generate in the same way as the tissue region mask
-            tumor_mask = np.zeros((mask_height, mask_width))  # empty tumor mask - no tumors are detected
-            normal_mask = make_masks.make_tissue_region_mask(slides_folder + slide_name, None, None, cfg.hyperparameter.mask_level)  # same mask as in the tissue region mask
+            # format the name of the slide to correspond its annotation
+            dic = {'T': 't', '.tif': '.xml'}
+            formatted_slide_name = slide_name
+            for i, j in dic.items():
+                formatted_slide_name = formatted_slide_name.replace(i, j)
 
-        # evaluate predicted tumor mask of the slide
-        predicted_tumor_mask, patches_coordinates = evaluate_slide()
+            # prepare tumor mask and normal (non-tumor) mask
+            try:  # if the slide contains annotated tumor region, create tumor mask and normal (non-tumor) mask
+                tumor_mask = make_masks.make_tumor_mask(slides_folder + slide_name, annotations_folder + formatted_slide_name, None, cfg.hyperparameter.mask_level)
+                normal_mask = make_masks.make_normal_mask(slides_folder + slide_name, annotations_folder + formatted_slide_name, None, cfg.hyperparameter.mask_level)
+            except:  # otherwise create empty tumor mask; normal mask generate in the same way as the tissue region mask
+                tumor_mask = np.zeros((mask_height, mask_width))  # empty tumor mask - no tumors are detected
+                normal_mask = make_masks.make_tissue_region_mask(slides_folder + slide_name, None, None, cfg.hyperparameter.mask_level)  # same mask as in the tissue region mask
 
-        # resize predicted tumor mask to smaller size - to speed up, used only for examination
-        predicted_tumor_mask_resized = cv2.resize(predicted_tumor_mask, (mask_width, mask_height), interpolation=cv2.INTER_LINEAR)
+            # evaluate predicted tumor mask of the slide
+            predicted_tumor_mask, patches_coordinates = evaluate_slide()
 
-        # threshold resized predicted tumor location map to get only BW mask
-        _, predicted_tumor_mask_thresholded = cv2.threshold(predicted_tumor_mask_resized, 220, 255, cv2.THRESH_BINARY)
+            # resize predicted tumor mask to smaller size - to speed up, used only for examination
+            predicted_tumor_mask_resized = cv2.resize(predicted_tumor_mask, (mask_width, mask_height), interpolation=cv2.INTER_LINEAR)
 
-        # prepare mask of predicted non-tumor region (not only tissue!) as predicted tumor region substracted from non-tumor region mask
-        # (represented by complete white mask - at the start, we are assuming that every pixel is non-tumor)
-        predicted_normal_mask = np.ones((mask_height, mask_width))*255 - predicted_tumor_mask_thresholded
+            # save resized tumor mask to .npy file (for CAMELYON16 evaluation purpose)
+            np.save(evaluate_folder + slide_name.replace('.tif', '.npy'), predicted_tumor_mask_resized)
 
-        # convert the grayscale masks to images of type uint8 (to provide unified array type)
-        predicted_tumor_mask_resized = cv2.convertScaleAbs(predicted_tumor_mask_resized)
-        predicted_tumor_mask_thresholded = cv2.convertScaleAbs(predicted_tumor_mask_thresholded)
-        predicted_normal_mask = cv2.convertScaleAbs(predicted_normal_mask)
-        tumor_mask = cv2.convertScaleAbs(tumor_mask)
-        normal_mask = cv2.convertScaleAbs(normal_mask)
+            # threshold resized predicted tumor location map to get only BW mask
+            _, predicted_tumor_mask_thresholded = cv2.threshold(predicted_tumor_mask_resized, 220, 255, cv2.THRESH_BINARY)
 
-        # create the TP, FP, TN, FN metric visualization
-        metric_visualization_mask = metric_visualization()
+            # prepare mask of predicted non-tumor region (not only tissue!) as predicted tumor region substracted from non-tumor region mask
+            # (represented by complete white mask - at the start, we are assuming that every pixel is non-tumor)
+            predicted_normal_mask = np.ones((mask_height, mask_width))*255 - predicted_tumor_mask_thresholded
 
-        # create undetected tumor mask (= tissue, that is classified as tumor by the pathologist, but our tissue detection algorithm did not detect it as the tissue)
-        undetected_tumor_mask = undetected_tumor_visualization()
+            # convert the grayscale masks to images of type uint8 (to provide unified array type)
+            predicted_tumor_mask_resized = cv2.convertScaleAbs(predicted_tumor_mask_resized)
+            predicted_tumor_mask_thresholded = cv2.convertScaleAbs(predicted_tumor_mask_thresholded)
+            predicted_normal_mask = cv2.convertScaleAbs(predicted_normal_mask)
+            tumor_mask = cv2.convertScaleAbs(tumor_mask)
+            normal_mask = cv2.convertScaleAbs(normal_mask)
 
-        # create grid visualization (draws squares around patches that are processed during the evaluation and also visualizes the undetected tumor mask)
-        grid_visualization_mask = grid_visualization(undetected_tumor_mask)
+            # create the TP, FP, TN, FN metric visualization
+            metric_visualization_mask = metric_visualization()
 
-        # convert the grayscale predicted tumor location map to RGB heatmap image
-        heatmap = cv2.cvtColor(predicted_tumor_mask_resized, cv2.COLOR_GRAY2RGB)
-        heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_PARULA)
+            # create undetected tumor mask (= tissue, that is classified as tumor by the pathologist, but our tissue detection algorithm did not detect it as the tissue)
+            undetected_tumor_mask = undetected_tumor_visualization()
 
-        # save all the visualizations to .png files
-        cv2.imwrite(cfg.path.evaluate + slide_name.replace('.tif', '') + '.png', predicted_tumor_mask_resized)
-        cv2.imwrite(cfg.path.evaluate + slide_name.replace('.tif', '') + '_metric_visualization.png', metric_visualization_mask)
-        cv2.imwrite(cfg.path.evaluate + slide_name.replace('.tif', '') + '_grid_visualization.png', grid_visualization_mask)
-        cv2.imwrite(cfg.path.evaluate + slide_name.replace('.tif', '') + '_heatmap.png', heatmap)
+            # convert the grayscale predicted tumor location map to RGB heatmap image
+            heatmap = cv2.cvtColor(predicted_tumor_mask_resized, cv2.COLOR_GRAY2RGB)
+            heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_PARULA)
+
+            # save all the visualizations to .png files
+            cv2.imwrite(evaluate_folder + slide_name.replace('.tif', '') + '.png', predicted_tumor_mask_resized)
+            cv2.imwrite(evaluate_folder + slide_name.replace('.tif', '') + '_metric_visualization.png', metric_visualization_mask)
+            cv2.imwrite(evaluate_folder + slide_name.replace('.tif', '') + '_undetected_tumor_grid.png', undetected_tumor_mask)
+            cv2.imwrite(evaluate_folder + slide_name.replace('.tif', '') + '_heatmap.png', heatmap)
+
+    if args.data == 'c17_test':
+
+        # create tumor probability map for every slide
+        for index, slide_name in enumerate(slides_list):
+
+            utils.visualize_progress(index, len(slides_list))
+
+            # evaluate only required slides
+            if index < int(args.start):
+                continue
+            if index > int(args.end):
+                break
+
+            # check if the slide is not corrupted
+            if slide_name in cfg.wsi.c17_error_slides:
+                print("Warning! Slide", slide_name, "is corrupted. Continuing with next slide.")
+                continue
+
+            # prepare all the slide necessities
+            slide = openslide.OpenSlide(slides_folder + slide_name)
+            patch_level_factor = float(slide.level_downsamples[cfg.hyperparameter.patch_level])
+            mask_level_factor = float(slide.level_downsamples[cfg.hyperparameter.mask_level])
+            patch_width, patch_height = slide.level_dimensions[cfg.hyperparameter.patch_level]
+            mask_width, mask_height = slide.level_dimensions[cfg.hyperparameter.mask_level]
+
+            # prepare tissue region mask
+            tissue_region_mask = make_masks.make_tissue_region_mask(slides_folder + slide_name, None, None, cfg.hyperparameter.mask_level)
+
+            # evaluate predicted tumor mask of the slide
+            predicted_tumor_mask, patches_coordinates = evaluate_slide()
+
+            # resize predicted tumor mask to smaller size - to speed up, used only for examination
+            predicted_tumor_mask_resized = cv2.resize(predicted_tumor_mask, (mask_width, mask_height), interpolation=cv2.INTER_LINEAR)
+
+            # save resized tumor mask to .npy and .png file
+            np.save(evaluate_folder + slide_name.replace('.tif', '.npy'), predicted_tumor_mask_resized)
+            cv2.imwrite(evaluate_folder + slide_name.replace('.tif', '') + '.png', predicted_tumor_mask_resized)

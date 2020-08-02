@@ -27,6 +27,7 @@ import configuration as cfg
 class Average(object):
     """
     This class computes and stores the average and current value.
+
     """
     def __init__(self):
         self.val = 0
@@ -41,7 +42,6 @@ class Average(object):
         self.avg = self.sum / self.count
 
 
-# define the training dataset class
 class TrainDataset(Dataset):
     """
 
@@ -97,10 +97,9 @@ class TrainDataset(Dataset):
             patch_img = self.normalize(patch_img)
 
         # return patch and its mask
-        return patch_img, mask_img
+        return patch_img, mask_img.squeeze(1).long()
 
 
-# define the evaluation dataset class
 class EvalDataset(Dataset):
     """
 
@@ -129,6 +128,9 @@ class EvalDataset(Dataset):
 
 
 class Metrics:
+    """
+
+    """
 
     def __init__(self, num_classes):
 
@@ -211,8 +213,11 @@ class Metrics:
         self.correct = 0
 
 
-# declare loss functions that are in usage
 def loss_functions():
+    """
+
+    :return:
+    """
 
     def focal_loss(prediction, masks):
 

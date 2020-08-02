@@ -1,7 +1,7 @@
 """A class to generate plots for the results of applied loss functions and/or
 accuracy of models trained with machine learning methods.
 
-CITATION:
+References:
     https://github.com/JamesLuoau/LossAccPlotter
 
 Example:
@@ -61,6 +61,8 @@ def ignore_nan_and_inf(value, label, x_index):
     elif math.isinf(value):
         warnings.warn("Got INF for value '%s' at x-index %d" % (label, x_index))
         return None
+    elif value > 1.5:
+        return None
     else:
         return value
 
@@ -106,7 +108,7 @@ class LossAccPlotter(object):
         assert save_to_filepath is not None or show_plot_window
 
         self.title = title
-        self.title_fontsize = 14
+        self.title_fontsize = 13
         self.show_regressions = show_regressions
         self.show_averages = show_averages
         self.show_loss_plot = show_loss_plot
@@ -122,10 +124,10 @@ class LossAccPlotter(object):
         # if there are no averages),
         # thin is used for the main values
         self.alpha_thick = 0.8
-        self.alpha_thin = 0.2
+        self.alpha_thin = 0.25
 
         # the interval for the moving averages, e.g. 20 = average over 20 epochs
-        self.averages_period = 20
+        self.averages_period = 150
 
         # these values deal with the regression
         self.poly_forward_perc = 0.1
@@ -270,7 +272,7 @@ class LossAccPlotter(object):
         """Creates empty figure and axes of the plot and shows it in a new window.
         """
         if self.show_loss_plot and self.show_acc_plot:
-            fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(24, 8))
+            fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(9.5, 4.5))
             self.fig = fig
             self.ax_loss = ax1
             self.ax_acc = ax2
@@ -282,18 +284,18 @@ class LossAccPlotter(object):
 
         # set_position is neccessary here in order to make space at the bottom
         # for the legend
-        for ax in [self.ax_loss, self.ax_acc]:
-            if ax is not None:
-                box = ax.get_position()
-                ax.set_position([box.x0, box.y0 + box.height * 0.1,
-                                 box.width, box.height * 0.9])
+        # for ax in [self.ax_loss, self.ax_acc]:
+        #     if ax is not None:
+        #         box = ax.get_position()
+        #         ax.set_position([box.x0, box.y0 + box.height * 0.1,
+        #                          box.width, box.height * 0.9])
 
         # draw the title
         # it seems to be necessary to set the title here instead of in redraw(),
         # otherwise the title is apparently added again and again with every
         # epoch, making it ugly and bold
         if self.title is not None:
-            self.fig.suptitle(self.title, fontsize=self.title_fontsize)
+            self.fig.suptitle(self.title, fontsize=self.title_fontsize, y=1)
 
         if self.show_plot_window:
             plt.show(block=False)
@@ -343,26 +345,31 @@ class LossAccPlotter(object):
 
         # Add legends (below both chart)
         ncol = 1
-        labels = ["$CHART train", "$CHART val."]
+        labels = ["training", "validation"]
         if self.show_averages:
-            labels.extend(["$CHART train (avg %d)" % (self.averages_period,),
-                           "$CHART val. (avg %d)" % (self.averages_period,)])
+            labels.extend(["training (average)",
+                           "validation (average)"])
             ncol += 1
         if self.show_regressions:
-            labels.extend(["$CHART train (regression)",
-                           "$CHART val. (regression)"])
+            labels.extend(["training (regression)",
+                           "validation (regression)"])
             ncol += 1
 
-        if ax1:
-            ax1.legend([label.replace("$CHART", "loss") for label in labels],
-                       loc="upper center",
-                       bbox_to_anchor=(0.5, -0.08),
-                       ncol=ncol)
-        if ax2:
-            ax2.legend([label.replace("$CHART", "acc.") for label in labels],
-                       loc="upper center",
-                       bbox_to_anchor=(0.5, -0.08),
-                       ncol=ncol)
+        # if ax1:
+        #     ax1.legend([label.replace("$CHART", "loss") for label in labels],
+        #                loc="upper center",
+        #                bbox_to_anchor=(0.5, -0.08),
+        #                ncol=ncol)
+        # if ax2:
+        #     ax2.legend([label.replace("$CHART", "accuracy") for label in labels],
+        #                loc="upper center",
+        #                bbox_to_anchor=(0.5, -0.08),
+        #                ncol=ncol)
+
+        plt.legend(loc="upper center",
+                   bbox_to_anchor=(0.5, 0),
+                   ncol=ncol,
+                   bbox_transform=plt.gcf().transFigure)
 
         plt.draw()
 
@@ -399,17 +406,24 @@ class LossAccPlotter(object):
 
         # Plot the lines
         alpha_main = self.alpha_thin if self.show_averages else self.alpha_thick
+        color_train = 'crimson'
+        color_validation = 'royalblue'
+
         if ax1:
             h_lt, = ax1.plot(list(self.values_loss_train.keys()), list(self.values_loss_train.values()),
-                             ls_loss_train, label="loss train", alpha=alpha_main)
+                             ls_loss_train, label="training ", alpha=alpha_main,
+                             color=color_train)
             h_lv, = ax1.plot(list(self.values_loss_val.keys()), list(self.values_loss_val.values()),
-                             ls_loss_val, label="loss val.", alpha=alpha_main)
+                             ls_loss_val, label="validation", alpha=alpha_main,
+                             color=color_validation)
             handles.extend([h_lt, h_lv])
         if ax2:
             h_at, = ax2.plot(list(self.values_acc_train.keys()), list(self.values_acc_train.values()),
-                             ls_acc_train, label="acc. train", alpha=alpha_main)
+                             ls_acc_train, label="training", alpha=alpha_main,
+                             color=color_train)
             h_av, = ax2.plot(list(self.values_acc_val.keys()), list(self.values_acc_val.values()),
-                             ls_acc_val, label="acc. val.", alpha=alpha_main)
+                             ls_acc_val, label="validation", alpha=alpha_main,
+                             color=color_validation)
             handles.extend([h_at, h_av])
 
         return handles
@@ -447,23 +461,31 @@ class LossAccPlotter(object):
 
         # plot the xy-values
         alpha_sma = self.alpha_thick
+        line_width = 1.5
+        color_train = 'crimson'
+        color_validation = 'royalblue'
+
         if ax1:
             # for loss chart
             h_lt, = ax1.plot(lt_sma_x, lt_sma_y, self.linestyles["loss_train_sma"],
-                             label="train loss (avg %d)" % (self.averages_period,),
-                             alpha=alpha_sma)
+                             label="training (average)",
+                             alpha=alpha_sma,
+                             linewidth=line_width, color=color_train)
             h_lv, = ax1.plot(lv_sma_x, lv_sma_y, self.linestyles["loss_val_sma"],
-                             label="val loss (avg %d)" % (self.averages_period,),
-                             alpha=alpha_sma)
+                             label="validation (average)",
+                             alpha=alpha_sma,
+                             linewidth=line_width, color=color_validation)
             handles.extend([h_lt, h_lv])
         if ax2:
             # for accuracy chart
             h_at, = ax2.plot(at_sma_x, at_sma_y, self.linestyles["acc_train_sma"],
-                             label="train acc (avg %d)" % (self.averages_period,),
-                             alpha=alpha_sma)
+                             label="training (average)",
+                             alpha=alpha_sma,
+                             linewidth=line_width, color=color_train)
             h_av, = ax2.plot(av_sma_x, av_sma_y, self.linestyles["acc_val_sma"],
-                             label="acc. val. (avg %d)" % (self.averages_period,),
-                             alpha=alpha_sma)
+                             label="validation (average)",
+                             alpha=alpha_sma,
+                             linewidth=line_width, color=color_validation)
             handles.extend([h_at, h_av])
 
         return handles

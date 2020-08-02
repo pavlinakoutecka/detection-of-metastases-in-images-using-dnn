@@ -20,22 +20,22 @@ class hyperparameter:
 
     # downsampling level parameters
     patch_level = 2
-    # =========
-    mask_level = 4
+    mask_level = 5
 
     # patch extraction parameters
     patch_size = 256
     tumor_patches_per_slide = 500
     normal_patches_per_slide = int(tumor_patches_per_slide/2)
+    patches_samples = 100
 
     # train parameters
-    split_ratio = 1
+    split_ratio = 10
     # =========
     num_classes = 2
     classes = ['No Tumor', 'Tumor']
     num_workers = 16
     epochs = 100
-    batch_size = 1
+    batch_size = 16  # training ... 16, evaluating ... 128
     learning_rate = 5e-6
 
     # storage parameters
@@ -47,11 +47,20 @@ class hyperparameter:
     saving_folder = '/mnt/datagrid/personal/koutepa2/bakprac/' if environment == 'server' else '/home/koutepa2/bakprac/'
 
     # net parameters
-    model = 'deeplabv3_resnet101' #'deeplabv3_resnet101'
-    trained_weights = saving_folder + f'Models/{model}/lvl_{str(patch_level)}/ep1__ps256__sr1__11_04-11_41_49.pt'
+    model = 'unet_resnet50'  # 'deeplabv3_resnet101' or 'fcn_resnet50' or 'unet_resnet50'
+    trained_weights = False
+    # trained_weights = saving_folder + f'Models/{model}/lvl_{str(patch_level)}/ep2__ps256__sr1__11_04-11_41_49.pt'
+    #   level 1: ep0__ps256__sr1__10_04-11_35_35.pt
+    #   level 2: ep1__ps256__sr1__11_04-11_41_49.pt, ep2__ps256__sr1__11_04-11_41_49.pt
     model_title = 'DeepLabV3 with a ResNet-101 backbone'
     # =========
     pretrained = False
+
+    # evaluation parameters
+    threshold_area = 40
+    #   level 1: 40 (thresholded for 254)
+    #   level 2: 66 (thresholded for 254)
+    threshold_saving_string = 'grid_lvl_1_threshold_254.txt'
 
 
 class path(hyperparameter):
@@ -82,12 +91,14 @@ class path(hyperparameter):
     patient_level_classification = hyperparameter.saving_folder + '4_patient_level_classification/'
 
     # images, graphs and models folders
-    extreme_patches = hyperparameter.saving_folder + 'Images/extreme_patches/'
-    extreme_losses = hyperparameter.saving_folder + 'Images/extreme_losses/'
+    extreme_patches = hyperparameter.saving_folder + f'Images/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/extreme_patches/'
+    extreme_losses = hyperparameter.saving_folder + f'Images/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/extreme_losses/'
+    patches_example = hyperparameter.saving_folder + f'Images/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/patches_example/'
     images = hyperparameter.saving_folder + f'Images/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
     graphs = hyperparameter.saving_folder + f'Graphs/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
     models = hyperparameter.saving_folder + f'Models/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
-    evaluate = hyperparameter.saving_folder + f'Evaluation/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
+    evaluate_slide = hyperparameter.saving_folder + f'3_slide_level_classification/Evaluation/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
+    evaluate_patient = hyperparameter.saving_folder + f'4_patient_level_classification/Evaluation/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
 
     # personal CAMELYON16 folders
     c16_patches_training = hyperparameter.saving_folder + f'CAMELYON16_personal/patches_training_lvl_{str(hyperparameter.patch_level)}/'
@@ -111,8 +122,8 @@ class path(hyperparameter):
     final_labels = hyperparameter.saving_folder + f'Datasets/labels_lvl_{str(hyperparameter.patch_level)}.csv'
 
     # demo slide path
-    demo_slide = source_folder + 'CAMELYON16/training/tumor/tumor_001.tif'  # slide used for testing
-    demo_xml = source_folder + 'CAMELYON16/Annotations/tumor_001.xml'  # xml used for testing
+    demo_slide = source_folder + 'CAMELYON16/testing/Test_010.tif'  # slide used for testing
+    demo_xml = source_folder + 'CAMELYON16/Annotations/test_010.xml'  # xml used for testing
 
 
 class wsi:
@@ -120,18 +131,9 @@ class wsi:
 
     """
 
-    # TODO: normal_86 je potreba vynechat a presunout jako tumor_111 (napsat panu Heringovi)
-    # TODO: test_049 je duplikovany snimek
-    # TODO: test_114 neni fully annotated
-    c16_error_train_slides = {'tumor_010.tif', 'tumor_015.tif', 'tumor_018.tif', 'tumor_020.tif', 'tumor_025.tif', 'tumor_029.tif', 'tumor_033.tif', 'tumor_034.tif', 'tumor_044.tif',
-                              'tumor_046.tif', 'tumor_051.tif', 'tumor_054.tif', 'tumor_055.tif', 'tumor_056.tif', 'tumor_067.tif', 'tumor_079.tif', 'tumor_085.tif', 'tumor_092.tif',
-                              'tumor_095.tif', 'tumor_110.tif', 'Normal_086.tif'}
-    c16_error_test_slides = {'Test_114.tif', 'Test_049.tif', '.Copy of Test_039.tif.mufpVx'}
-
-    # TODO: tyto snimky jsou oficialne dostupne, jen je musim pridat na datagrid (napsat panu Heringovi)
-    c17_error_slides = {'patient_000_node_0.tif', 'patient_000_node_1.tif', 'patient_000_node_2.tif', 'patient_000_node_3.tif', 'patient_000_node_4.tif',
-                        'patient_001_node_0.tif', 'patient_001_node_1.tif', 'patient_001_node_2.tif', 'patient_001_node_3.tif', 'patient_001_node_4.tif',
-                        'patient_040_node_0.tif', 'patient_040_node_1.tif', 'patient_040_node_2.tif', 'patient_040_node_3.tif', 'patient_040_node_4.tif',
-                        'patient_041_node_0.tif', 'patient_041_node_1.tif', 'patient_041_node_2.tif', 'patient_041_node_3.tif', 'patient_041_node_4.tif',
-                        'patient_042_node_0.tif', 'patient_042_node_1.tif', 'patient_042_node_2.tif', 'patient_042_node_3.tif', 'patient_042_node_4.tif'}
+    # Test_049: duplicated slide, other slides: annotations are not exhaustive
+    c16_error_slides = {'tumor_010.tif', 'tumor_015.tif', 'tumor_018.tif', 'tumor_020.tif', 'tumor_025.tif', 'tumor_029.tif', 'tumor_033.tif', 'tumor_034.tif', 'tumor_044.tif',
+                        'tumor_046.tif', 'tumor_051.tif', 'tumor_054.tif', 'tumor_055.tif', 'tumor_056.tif', 'tumor_067.tif', 'tumor_079.tif', 'tumor_085.tif',
+                        'tumor_092.tif', 'tumor_095.tif', 'tumor_110.tif', 'Test_114.tif', 'Test_049.tif'}
+    c17_error_slides = {}
 

@@ -79,15 +79,16 @@ def plot_patch_prediction():
     :return:
     """
 
-    path = 'C:/Users/koute/ownCloud/BAKALÁŘKA/scripts/bakprac/3_slide_level_classification/extreme_losses/'
+    path = cfg.path.patches_example  # cfg.path.extreme_losses / cfg.path.patches_example
+    patch_type = 'sample'  # 'lowest_loss' / 'highest_loss' / 'sample'
 
-    for i in range(100):
+    for i in range(cfg.hyperparameter.patches_samples):
 
         fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
 
-        patch = mpimg.imread(path + 'lowest_loss_patch' + str(i) + '.png')
-        mask = mpimg.imread(path + 'lowest_loss_mask' + str(i) + '.png')
-        prediction = mpimg.imread(path + 'lowest_loss_prediction' + str(i) + '.png')
+        patch = mpimg.imread(path + f'{patch_type}_patch' + str(i) + '.png')
+        mask = mpimg.imread(path + f'{patch_type}_mask' + str(i) + '.png')
+        prediction = mpimg.imread(path + f'{patch_type}_prediction' + str(i) + '.png')
 
         ax1.imshow(patch)
         ax2.imshow(mask, cmap='gray', norm=NoNorm())
@@ -98,7 +99,7 @@ def plot_patch_prediction():
         ax3.set_title('Predicted mask')
 
         fig.show()
-        fig.savefig('C:/Users/koute/ownCloud/BAKALÁŘKA/scripts/bakprac/3_slide_level_classification/extreme_losses/merged_lowest_loss/' + str(i) + '.png')
+        fig.savefig(path + f'merged/{patch_type}' + str(i) + '.png')
 
 
 def plotFROC():
@@ -115,9 +116,9 @@ def plotFROC():
         -
     """
 
-    csvDIR1 = cfg.hyperparameter.saving_folder + 'FROC_data_lvl_1.csv'
+    csvDIR1 = cfg.path.saving_folder + 'FROC_data_lvl_1.csv'
     csv1 = np.genfromtxt(csvDIR1, delimiter=',')
-    csvDIR2 = cfg.hyperparameter.saving_folder + f'FROC_data_lvl_2.csv'
+    csvDIR2 = cfg.path.saving_folder + f'FROC_data_lvl_2.csv'
     csv2 = np.genfromtxt(csvDIR2, delimiter=',')
 
     total_FPs1, total_sensitivity1, FROC_score1 = csv1.T[0], csv1.T[1], csv1.T[2]
@@ -136,6 +137,8 @@ def plotFROC():
     plt.grid(b=True, which='major', color='#666666', linestyle='-')
     plt.minorticks_on()
     plt.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.2)
-    plt.savefig(cfg.path.images + 'Evaluation_FROC.png')
+    plt.savefig(cfg.path.saving_folder + 'Evaluation_FROC.png')
     plt.show()
 
+
+plot_patch_prediction()

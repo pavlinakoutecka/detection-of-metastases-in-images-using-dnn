@@ -53,7 +53,7 @@ def create_train_dataset_c16(slides_folder, annotations_folder):
                 formatted_slide = formatted_slide.replace(i, j)
 
             # check if the tumor slide is exhaustively annotated
-            if slide in cfg.wsi.c16_error_train_slides:  # if the slide is not exhaustively annotated, create only tumor patches
+            if slide in cfg.wsi.c16_error_slides:  # if the slide is not exhaustively annotated, create only tumor patches
                 print("Warning! Slide", slide, "is not exhaustively annotated, normal patches will not be created.")
 
                 make_patches.sample_tumor_region(slides_folder + slide, annotations_folder + formatted_slide, slide, cfg.path.c16_patches_training,
@@ -76,11 +76,6 @@ def create_train_dataset_c16(slides_folder, annotations_folder):
 
         # otherwise, create only normal patches
         else:
-            # TODO: normal_086 pote presunout a tuto podminku odstranit
-            if slide in cfg.wsi.c16_error_train_slides:  # if the slide is not exhaustively annotated, don't create normal patches
-                print("Warning! Slide", slide, "is not correct, normal patches will not be created.")
-                continue
-
             make_patches.sample_normal_region(slides_folder + slide, annotations_folder, slide, cfg.path.c16_patches_training, cfg.path.c16_patches_masks_training,
                                               cfg.hyperparameter.mask_level, cfg.hyperparameter.patch_level, cfg.hyperparameter.patch_size,
                                               cfg.hyperparameter.normal_patches_per_slide, None)
@@ -109,7 +104,7 @@ def create_test_dataset_c16(slides_folder, annotations_folder):
         print("Generating patches of the slide ", slide, end='\n')
 
         # check if the slide is not corrupted
-        if slide in cfg.wsi.c16_error_test_slides:
+        if slide in cfg.wsi.c16_error_slides:
             print("Warning! Slide", slide, "is corrupted. Continuing with next slide.")
             continue
 

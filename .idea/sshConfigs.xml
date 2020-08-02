@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="53e52869-d4c2-4cda-b00d-6507787705e1" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="1565fc2e-3d2a-4455-81be-e557f27176dc" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="5173d1b7-9d76-475a-9c75-1120b87a23c7" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="cbca8199-60ae-42c4-ac62-3977aa1ada10" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="fbbdb7ae-99ef-4c7c-a5f5-4a8b0e4d61ec" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" username="koutepa2" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="de6d3800-50e1-4e54-afc0-cb3077c8d380" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="3c947b92-03e8-41e9-95ca-cee52279a2b9" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="67146412-deab-4ff3-b322-afd005426218" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="1971b9e7-2651-4512-be6f-0eb37a9248ec" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="ec444e96-76fa-4471-9d8d-b2149a7dc7b0" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="d7f17896-7582-49fa-9701-b830e4ec5749" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="df0617cc-3d7d-4c7a-acf5-035abf70009a" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="5f9feada-0f40-4a08-a678-7c3685c5e8f4" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="29080dcc-8bf8-40a3-b1c2-570f02af6c60" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="84621c15-3eb8-4e09-b5cb-3d9482944320" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="a3a1edb2-0026-46dc-b77a-228153944e03" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="7f33a46d-d394-4ee8-a23b-25253ac60169" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="3e07aec7-b509-4f2e-8664-02828c813e63" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="12cdfc83-e868-47c7-b6b4-9b44c5daee40" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="fcd87e5c-36b4-4e95-90e7-9775eb2d524d" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="dedac2ba-74b4-4cc3-ba34-98963d9f5778" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="be676aa0-5afd-4bfe-b105-087ec3426339" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="3738f3ea-544b-4935-b97e-603fcf1cd70a" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="0bc45d5b-5fb9-4b22-8ff0-699ee7a58362" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="da4d7ef0-6e60-402a-9964-1c933228d4d8" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="1f36c209-8a1c-4816-9ca1-3b45124e6332" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="d40607cf-95fc-4c8a-833b-b974081d06d4" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="707ac4c6-5347-4dd5-8ef9-45125d8c4f58" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="0fa9b9bd-5732-43a7-a4d4-76be9731e3c7" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="1725621a-a43b-4791-b4f0-dae1eece5d64" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="6b778011-8a80-413b-a63c-9b51433ae786" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="fcc9863f-31f1-4d51-86d7-1a5dd2187746" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="222909c8-4efa-4b3a-b9fc-08b66325910c" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="5ba32382-e604-4e4d-b879-b5f14fb17c53" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="2c65ff52-d97a-4bbf-a2b5-4d3f50ab359c" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="efa5af41-be5f-481e-8809-544b73979373" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="88e6f30f-9882-4288-a64b-d6ffc64e0464" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="7bacece2-e083-41b0-8b7f-9a2256cc1fc0" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="bce3a4c6-ad19-4197-8503-c07e199b160f" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="bb491bd1-658d-433d-b569-55dc7a73e350" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="0ca980e2-91c5-4e86-87a7-22fa9482f4a2" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="00bf11be-0693-43ea-8393-3ee0d03382e2" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="2c6a971d-5841-4f69-bd70-3ded59d9a1b0" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="674f3dc4-6397-4ded-a8b9-3bf3fcb09ab4" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="9dfdc2bc-2ad8-411d-ad26-cea952212e83" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="c8426049-032c-4ce8-9f9c-ad81a08c1faa" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="d1113c3b-bc0b-47c6-a13b-8e9ccea0c537" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="0a0f02ca-eac2-4e4f-afd5-232c9d35c588" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="55ab7bb9-5b1e-4e04-8cbd-9bc1b2b5702b" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="d5139d05-367e-48f4-83b1-5def3f2affc0" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="483584e7-5d1e-4452-852c-71fe61796da8" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="9ee720a7-26c2-4783-9164-3ff0d2509d1e" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="7fd8bfd4-9d2a-4779-bd04-aa2ce4ba17d6" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="6da2ea41-2e1b-4c9a-87e3-6075bf5d24cd" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="dd2a5310-dcf5-4db0-ae0f-0987e07df590" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="fa131f44-8522-41ef-856a-c5912ea6c19a" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="45a62cfc-28f7-4e8b-a954-2bbe9b5fe30a" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="3eea8926-cea7-4af3-8b1b-f1e1138d8a50" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="738c88e6-2aaf-439f-a2e4-a60cb8aba8b8" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="447e3d77-6288-4e48-b8cf-d9eb58357ce2" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="1c889d25-a1b8-48bd-90bf-d21fe948a6df" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="222967f5-3b05-48d6-a733-4f176f887873" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="7eeb14c1-b98e-47a5-863a-8178f2910730" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="7729f42a-1d17-4d72-96cf-c1110c778aef" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="8f0a004c-be08-4944-b98d-2da9dcddcb92" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="c19c5fe9-5552-483b-9500-96b7e65d4823" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="558c409b-5848-4209-88a6-860f9a3c01cb" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="2c9bce21-2c4b-4bd9-9e3c-62cfabd1ec5d" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="41812280-bb67-438f-8fb6-b30a421a6419" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="4f002430-3025-401f-9e6a-1446e1d41d2b" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="f8d3e1c2-0257-4ba0-bed4-d24091be1b46" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="f3879bec-4ed0-462e-85da-36f64665b1f7" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="a920ef71-ea4c-4b89-8fa1-be6f94f99391" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="e536ce82-6303-4d03-bb68-ddccc4e2868f" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="a161f854-dea7-4690-a477-26218d8cce2b" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="2305b6d4-2cd1-4609-b74e-e3c859e7f2ee" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="2a23923e-f404-4ccd-891c-49a13fb17267" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="66e655e5-87e2-4296-830a-04725925dae5" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="4d741119-98f1-4dbe-bcf8-15856cd03cb3" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="80d5383b-951e-4d11-89b5-47c2dad1b971" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="a03499c3-7b03-4f54-ba60-3faf31efd8f9" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="0dd27a3d-7c68-450b-91e1-9ff0e8da79f0" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="28a5b3fb-3ca9-4a4f-8f02-3a83e81c4642" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="f1186457-3b8d-49d5-9df6-a63831f7bcfb" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="04c86695-d3f6-4ac7-89ee-4bd28e01d928" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="804229f2-34b4-4eb3-8f4d-75ed2626c747" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="65e3fe0a-6f7d-4185-b987-590518d20e1b" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="a3e35c78-22b4-4ad4-b3be-8805400bbdad" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="83158b11-f220-40e5-8bf3-43e5144b9628" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="76e08bb8-abeb-4979-ac4e-0da839433681" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="4c6e7da1-c5dd-4e43-b380-7544c9523bec" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="boruvka.felk.cvut.cz" id="fd76cf8f-8e07-4b50-a516-4ece6956cd8e" port="22" customName="boruvka.felk.cvut.cz" nameFormat="CUSTOM" username="koutepa2" />
+      <sshConfig authType="PASSWORD" host="login.rci.cvut.cz" id="a41837b7-ad19-4795-b232-3cc59be5db99" port="22" customName="login.rci.cvut.cz" nameFormat="CUSTOM" />
+    </configs>
+  </component>
+</project>

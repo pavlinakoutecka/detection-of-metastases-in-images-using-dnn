@@ -20,7 +20,7 @@ import configuration as cfg
 from laplotter import LossAccPlotter
 
 
-def plot_confusion_matrix(cm, target_names, title='Confusion matrix', cmap=None, normalize=True):
+def plot_confusion_matrix(cm, target_names, path, title='Confusion matrix', cmap=None, normalize=True):
     """
     Given a sklearn confusion matrix (cm), make a nice plot
 
@@ -35,7 +35,7 @@ def plot_confusion_matrix(cm, target_names, title='Confusion matrix', cmap=None,
                        If True, plot the proportions
     :return: confusion matrix as an object to plot
 
-    CITATION:
+    References:
         http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
         https://www.kaggle.com/grfiv4/plot-a-confusion-matrix
     """
@@ -70,14 +70,24 @@ def plot_confusion_matrix(cm, target_names, title='Confusion matrix', cmap=None,
                      horizontalalignment="center",
                      color="white" if cm[i, j] > thresh else "black")
 
-    plt.ylim([1.5, -0.5])
+    plt.ylim([3.5, -0.5])  # [1.5, -0.5]
     plt.ylabel('True label')
     plt.xlabel('Predicted label\n\naccuracy={:0.4f} ; misclass={:0.4f}'.format(accuracy, misclass))
-    plt.savefig(cfg.path.graphs + f'confusion_matrix' + cfg.hyperparameter.saving_string + '.png')
+    plt.savefig(path)
     plt.show()
 
 
 def plot_smoothed_curve(path, train_acc_csv, val_acc_csv, train_loss_csv, val_loss_csv):
+    """
+
+    :param path:
+    :param train_acc_csv:
+    :param val_acc_csv:
+    :param train_loss_csv:
+    :param val_loss_csv:
+    :return:
+    """
+
     plotter = LossAccPlotter(title="Model performance",
                              save_to_filepath=path,
                              show_regressions=False,
