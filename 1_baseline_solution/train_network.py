@@ -389,11 +389,13 @@ def find_lr(trn_loader, init_value=1e-12, final_value=10.):
         print('Actual lr: {:.9f}\t Actual loss: {:.4f}'.format(lr, smoothed_loss), end='\r')
 
     # plot results of finding optimal LR
-    plt.plot(log_lrs[10:-5], losses[10:-5], linewidth=1.5, color='royalblue')
+    plt.figure(figsize=(6.5, 4))
+    plt.plot(log_lrs[10:-5], losses[10:-5], linewidth=1.5, color='crimson')
     plt.xlabel("Learning rate")
     plt.ylabel("Loss")
-    plt.title("Learning rate searching process for ResNet-50")
-    plt.savefig(cfg.path.graphs + f'lr_searcher_baseline_' + cfg.hyperparameter.saving_string + '.pdf', format='pdf')
+    plt.grid(True)
+    plt.title(f"Learning rate searching process for the {cfg.hyperparameter.model_title} model", y=1.02)
+    plt.savefig(cfg.path.graphs + f'lr_searcher' + cfg.hyperparameter.saving_string + '.pdf', format='pdf')
     plt.show()
 # ------------------------------------------------------------------------------------------------
 
@@ -412,7 +414,7 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(path, map_location=device))  # loading my own model
     model.to(device)
 
-    # hyperparameters for the model TODO: try tuning these parameters
+    # hyperparameters for the model
     epochs = 40
     classes = 2
     batch_size = 64

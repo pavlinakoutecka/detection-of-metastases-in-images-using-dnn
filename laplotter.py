@@ -272,7 +272,7 @@ class LossAccPlotter(object):
         """Creates empty figure and axes of the plot and shows it in a new window.
         """
         if self.show_loss_plot and self.show_acc_plot:
-            fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(9.5, 4.5))
+            fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(9, 4.2))
             self.fig = fig
             self.ax_loss = ax1
             self.ax_acc = ax2
@@ -295,7 +295,7 @@ class LossAccPlotter(object):
         # otherwise the title is apparently added again and again with every
         # epoch, making it ugly and bold
         if self.title is not None:
-            self.fig.suptitle(self.title, fontsize=self.title_fontsize, y=1)
+            self.fig.suptitle(self.title, y=1)
 
         if self.show_plot_window:
             plt.show(block=False)

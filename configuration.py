@@ -19,7 +19,7 @@ class hyperparameter:
     seed = 1
 
     # downsampling level parameters
-    patch_level = 2
+    patch_level = 1
     mask_level = 5
 
     # patch extraction parameters
@@ -29,30 +29,36 @@ class hyperparameter:
     patches_samples = 100
 
     # train parameters
-    split_ratio = 10
+    split_ratio = 1
+    batch_size = 32  # training ... 16, evaluating ... 128
+    learning_rate = 1e-5
     # =========
     num_classes = 2
     classes = ['No Tumor', 'Tumor']
     num_workers = 16
     epochs = 100
-    batch_size = 16  # training ... 16, evaluating ... 128
-    learning_rate = 5e-6
 
     # storage parameters
     environment = 'server'  # 'server' or 'cluster'
-    save_run = False
+    save_run = True
     # =========
     date = now.strftime("%d_%m-%H_%M_%S")
     saving_string = f'__ps{str(patch_size)}__sr{str(split_ratio)}__{date}'
     saving_folder = '/mnt/datagrid/personal/koutepa2/bakprac/' if environment == 'server' else '/home/koutepa2/bakprac/'
 
     # net parameters
-    model = 'unet_resnet50'  # 'deeplabv3_resnet101' or 'fcn_resnet50' or 'unet_resnet50'
+    model = 'fcn_resnet50'  # 'deeplabv3_resnet101' or 'fcn_resnet50' or 'unet_resnet50' or 'resnet50'
     trained_weights = False
     # trained_weights = saving_folder + f'Models/{model}/lvl_{str(patch_level)}/ep2__ps256__sr1__11_04-11_41_49.pt'
     #   level 1: ep0__ps256__sr1__10_04-11_35_35.pt
     #   level 2: ep1__ps256__sr1__11_04-11_41_49.pt, ep2__ps256__sr1__11_04-11_41_49.pt
-    model_title = 'DeepLabV3 with a ResNet-101 backbone'
+    model_titles_dictionary = {
+        'deeplabv3_resnet101': 'DeepLabV3 with a ResNet-101 backbone',
+        'fcn_resnet50': 'Fully Convolutional Network with a ResNet-50 backbone',
+        'unet_resnet50': 'UNet with a ResNet-50 backbone',
+        'resnet50': 'Resnet-50 model'
+    }
+    model_title = model_titles_dictionary[model]
     # =========
     pretrained = False
 
@@ -85,10 +91,11 @@ class path(hyperparameter):
     # =============================================================================================================
 
     # section folders
-    preparation = hyperparameter.saving_folder + '1_preparation/'
+    baseline_solution = hyperparameter.saving_folder + '1_baseline_solution/'
     preprocessing_and_visualization = hyperparameter.saving_folder + '2_preprocessing_and_visualization/'
-    slide_level_classification = hyperparameter.saving_folder + '3_slide_level_classification/'
-    patient_level_classification = hyperparameter.saving_folder + '4_patient_level_classification/'
+    patch_level_segmentation = hyperparameter.saving_folder + '3_patch_level_segmentation/'
+    slide_level_classification = hyperparameter.saving_folder + '4_slide_level_classification/'
+    patient_level_classification = hyperparameter.saving_folder + '5_patient_level_classification/'
 
     # images, graphs and models folders
     extreme_patches = hyperparameter.saving_folder + f'Images/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/extreme_patches/'
@@ -97,8 +104,8 @@ class path(hyperparameter):
     images = hyperparameter.saving_folder + f'Images/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
     graphs = hyperparameter.saving_folder + f'Graphs/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
     models = hyperparameter.saving_folder + f'Models/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
-    evaluate_slide = hyperparameter.saving_folder + f'3_slide_level_classification/Evaluation/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
-    evaluate_patient = hyperparameter.saving_folder + f'4_patient_level_classification/Evaluation/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
+    evaluate_slide = hyperparameter.saving_folder + f'4_slide_level_classification/Evaluation/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
+    evaluate_patient = hyperparameter.saving_folder + f'5_patient_level_classification/Evaluation/{hyperparameter.model}/lvl_{str(hyperparameter.patch_level)}/'
 
     # personal CAMELYON16 folders
     c16_patches_training = hyperparameter.saving_folder + f'CAMELYON16_personal/patches_training_lvl_{str(hyperparameter.patch_level)}/'

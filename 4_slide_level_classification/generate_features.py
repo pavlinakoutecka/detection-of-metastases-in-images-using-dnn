@@ -25,7 +25,7 @@ import pathlib
 parent_path = str(pathlib.Path().absolute().parent)
 sys.path.append(parent_path)
 sys.path.append(parent_path + '/2_preprocessing_and_visualization')
-sys.path.append(parent_path + '/3_slide_level_classification')
+sys.path.append(parent_path + '/3_patch_level_segmentation')
 import configuration as cfg
 import utils
 

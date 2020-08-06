@@ -11,7 +11,7 @@ Description:    This file aims to train and validate specified model. This proce
                     > evaluate the model - this function runs the process of evaluating the model - computes one epoch,
                     prints its stats and creates confusion matrix
                     > find learning rate - this function runs process of searching for optimal learning rate of chosen model
-                    > find random samples - this function stores to .png defined number of patches from validation dataset
+                    > find random samples - this function stores to .pdf defined number of patches from validation dataset
                     > find extremal samples - this function finds patches from validation dataset with lowest and highest loss.
 """
 
@@ -139,7 +139,10 @@ def find_lr(trn_loader, init_value=1e-12, final_value=10.):
 
         # get the loss for this mini-batch
         optimizer.zero_grad()
-        outputs = model(inputs)['out']
+        if cfg.hyperparameter.model == 'unet_resnet50':
+            outputs = model(inputs)
+        else:
+            outputs = model(inputs)['out']
         loss = criterion(outputs, labels)
 
         # compute the smoothed loss to create a clean graph
@@ -170,10 +173,12 @@ def find_lr(trn_loader, init_value=1e-12, final_value=10.):
         print('Actual lr: {:.9f}\t Actual loss: {:.4f}'.format(lr, smoothed_loss), end='\r')
 
     # plot results of finding optimal LR
-    plt.plot(log_lrs[10:-5], losses[10:-5], "b-")
+    plt.figure(figsize=(6.5, 4))
+    plt.plot(log_lrs[10:-5], losses[10:-5], linewidth=1.5, color='crimson')
     plt.xlabel("Learning rate")
     plt.ylabel("Loss")
-    plt.title("Learning rate searching process for " + cfg.hyperparameter.model_title)
+    plt.grid(True)
+    plt.title(f"Learning rate searching process for the {cfg.hyperparameter.model_title}", y=1.02)
     plt.savefig(cfg.path.graphs + f'lr_searcher' + cfg.hyperparameter.saving_string + '.pdf', format='pdf')
     plt.show()
 
@@ -215,7 +220,11 @@ def find_random_samples():
             masks = masks.to(device)
 
             # forward pass
-            outputs = model(patches)['out']
+            if cfg.hyperparameter.model == 'unet_resnet50':
+                outputs = model(patches)
+            else:
+                outputs = model(patches)['out']
+
 
             # apply softmax function
             outputs = torch.nn.functional.softmax(outputs, dim=1)
@@ -286,7 +295,11 @@ def find_extremal_samples():
             masks = masks.to(device)
 
             # forward pass
-            outputs = model(patches)['out']
+            if cfg.hyperparameter.model == 'unet_resnet50':
+                outputs = model(patches)
+            else:
+                outputs = model(patches)['out']
+
 
             # calculate loss and apply softmax function
             loss = criterion(outputs, masks)
@@ -369,7 +382,10 @@ def train_epoch(epoch):
         optimizer.zero_grad()
 
         # forward pass
-        outputs = model(patches)
+        if cfg.hyperparameter.model == 'unet_resnet50':
+            outputs = model(patches)
+        else:
+            outputs = model(patches)['out']
 
         # calculate loss
         loss = criterion(outputs, masks)
@@ -437,7 +453,10 @@ def validate_epoch(epoch):
             masks = masks.to(device)
 
             # forward pass
-            outputs = model(patches)['out']
+            if cfg.hyperparameter.model == 'unet_resnet50':
+                outputs = model(patches)
+            else:
+                outputs = model(patches)['out']
 
             # calculate loss
             loss = criterion(outputs, masks)
@@ -543,7 +562,7 @@ def process_of_training():
             plt.ylabel("loss")
             plt.title("Model loss")
             plt.legend()
-            plt.savefig(cfg.path.graphs + f'ep{str(epoch)}__model_loss' + cfg.hyperparameter.saving_string + '.png')
+            plt.savefig(cfg.path.graphs + f'ep{str(epoch)}__model_loss' + cfg.hyperparameter.saving_string + '.pdf')
             plt.show()
 
             # save accuracy curve to .csv file
@@ -552,7 +571,7 @@ def process_of_training():
             df = pd.DataFrame({'axis': val_axis, 'acc': val_accuracy_global})
             df.to_csv(cfg.path.graphs + f'ep{str(epoch)}__val_accuracy' + cfg.hyperparameter.saving_string + '.csv', header=False, index=False)
 
-            # plot accuracy curve to .png file
+            # plot accuracy curve to .pdf file
             plt.figure()
             plt.plot(train_axis, train_accuracy_global, "b-", label='training accuracy')
             plt.plot(val_axis, val_accuracy_global, "r-", label='validation accuracy')
@@ -560,11 +579,11 @@ def process_of_training():
             plt.ylabel("accuracy")
             plt.title("Model accuracy")
             plt.legend()
-            plt.savefig(cfg.path.graphs + f'ep{str(epoch)}__model_accuracy' + cfg.hyperparameter.saving_string + '.png')
+            plt.savefig(cfg.path.graphs + f'ep{str(epoch)}__model_accuracy' + cfg.hyperparameter.saving_string + '.pdf')
             plt.show()
 
-            # plot smoothed accuracy and loss curves to .png file
-            plot_utils.plot_smoothed_curve(cfg.path.graphs + f'ep{str(epoch)}__smoothed' + cfg.hyperparameter.saving_string + '.png',
+            # plot smoothed accuracy and loss curves to .pdf file
+            plot_utils.plot_smoothed_curve(cfg.path.graphs + f'ep{str(epoch)}__smoothed' + cfg.hyperparameter.saving_string + '.pdf',
                                            cfg.path.graphs + f'ep{str(epoch)}__train_accuracy' + cfg.hyperparameter.saving_string + '.csv',
                                            cfg.path.graphs + f'ep{str(epoch)}__val_accuracy' + cfg.hyperparameter.saving_string + '.csv',
                                            cfg.path.graphs + f'ep{str(epoch)}__train_loss' + cfg.hyperparameter.saving_string + '.csv',
@@ -586,9 +605,9 @@ def process_of_evaluation():
     print("\n ACCURACY: {}\t LOSS: {}\n".format(accuracy, loss))
     metrics.print()
 
-    # plot confusion matrix to .png file
+    # plot confusion matrix to .pdf file
     if cfg.hyperparameter.save_run:
-        plot_utils.plot_confusion_matrix(cm=confusion_matrix, normalize=False, path=cfg.path.graphs + f'confusion_matrix' + cfg.hyperparameter.saving_string + '.png',
+        plot_utils.plot_confusion_matrix(cm=confusion_matrix, normalize=False, path=cfg.path.graphs + f'confusion_matrix' + cfg.hyperparameter.saving_string + '.pdf',
                                          title="Confusion matrix", cmap=None, target_names=cfg.hyperparameter.classes)
 
 

@@ -2,7 +2,7 @@
 File:           utils.py
 Author:         Pavlina Koutecka
 Date:           25/02/2020
-Description:    This file
+Description:    This file holds some basic utilities to help with
 
 """
 
@@ -125,9 +125,10 @@ def visualize_progress(current, total, estimated=None, text=None):
 
 def rename(folder):
     """
+    This function renames files in a specified folder.
 
-    :param folder:
-    :return:
+    :param folder: folder of files that should by renamed
+    :return: None
     """
 
     os.chdir(folder)
@@ -142,10 +143,12 @@ def rename(folder):
 
 def find_nearest(array, value):
     """
+    This function finds the array element with the value closest to chosen value and
+    returns it index.
 
-    :param array:
-    :param value:
-    :return:
+    :param array: array to be searched for the closest value
+    :param value: value we want to find in array
+    :return: index of the element with the closest value
     """
 
     array = np.asarray(array)

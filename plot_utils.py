@@ -88,7 +88,7 @@ def plot_smoothed_curve(path, train_acc_csv, val_acc_csv, train_loss_csv, val_lo
     :return:
     """
 
-    plotter = LossAccPlotter(title="Model performance",
+    plotter = LossAccPlotter(title=f"Performance of the {cfg.hyperparameter.model_title}",
                              save_to_filepath=path,
                              show_regressions=False,
                              show_averages=True,
