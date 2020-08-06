@@ -2,8 +2,16 @@
 File:           configuration.py
 Author:         Pavlina Koutecka
 Date:           21/02/2020
-Description:    This file
+Description:    This file holds all the necessary configuration parameters needed for the whole
+                framework to work properly. All possible parameters should be  controlled through
+                this file.
 
+                The configuration file is divided into three sections:
+
+                    > hyperparameters - this sections holds information about all defined parameters
+                      and other framework parameters
+                    > path - this section holds paths to all important files and directories
+                    > wsi - this section holds information about used WSIs.
 """
 
 
@@ -13,7 +21,7 @@ now = datetime.now()
 
 class hyperparameter:
     """
-
+    Class holding all hyperparameters and other parameters defined in the whole pipeline.
     """
 
     seed = 1
@@ -71,7 +79,7 @@ class hyperparameter:
 
 class path(hyperparameter):
     """
-
+    Class holding all paths defined in the whole pipeline.
     """
     # main source folder
     source_folder = '/mnt/medical/microscopy/' if hyperparameter.environment == 'server' else '/home/koutepa2/bakprac/'
@@ -135,7 +143,7 @@ class path(hyperparameter):
 
 class wsi:
     """
-
+    Class holding info about WSIs used in the pipeline.
     """
 
     # Test_049: duplicated slide, other slides: annotations are not exhaustive

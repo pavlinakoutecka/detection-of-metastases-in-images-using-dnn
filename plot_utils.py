@@ -2,15 +2,17 @@
 File:           plot_utils.py
 Author:         Pavlina Koutecka
 Date:           09/04/2020
-Description:    This file
+Description:    This file some basic utilities to improve the plotting process.
+                Currently, these utilities are implemented:
 
+                > plot confusion matrix - make a nice plot of a confusion matrix
+                > plot smoothed curve - smoothen stored accuracy and loss curves.
 """
 
 
 import matplotlib.pyplot as plt
 import itertools
 import numpy as np
-import pandas as pd
 
 import sys
 import pathlib
@@ -79,12 +81,13 @@ def plot_confusion_matrix(cm, target_names, path, title='Confusion matrix', cmap
 
 def plot_smoothed_curve(path, train_acc_csv, val_acc_csv, train_loss_csv, val_loss_csv):
     """
+    Use the laplotter.py to smoothen some stored runs of accuracy and loss curves.
 
-    :param path:
-    :param train_acc_csv:
-    :param val_acc_csv:
-    :param train_loss_csv:
-    :param val_loss_csv:
+    :param path: path to where the result will be stored
+    :param train_acc_csv: training accuracy curve to be smoothen
+    :param val_acc_csv: validation accuracy curve to be smoothen
+    :param train_loss_csv: training loss curve to be smoothen
+    :param val_loss_csv: validation loss curve to be smoothen
     :return:
     """
 

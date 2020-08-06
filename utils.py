@@ -2,8 +2,14 @@
 File:           utils.py
 Author:         Pavlina Koutecka
 Date:           25/02/2020
-Description:    This file holds some basic utilities to help with
+Description:    This file holds some basic utilities to perform simple features.
+                Currently, these utilities are implemented:
 
+                    > time format function - prints time nicely
+                    > progress bar visualization function - prints training progress nicely
+                    > rename function - renames files in specified folder
+                    > find neares function - finds array element with a best match
+                    > parsing funcion - parses passing arguments.
 """
 
 

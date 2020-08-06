@@ -2,8 +2,14 @@
 File:           train_utils.py
 Author:         Pavlina Koutecka
 Date:           28/03/2020
-Description:    This file
+Description:    This file some basic utilities to improve the training process.
+                Currently, these utilities are implemented:
 
+                > Average - class that computes and stores the average and current value
+                > TrainDataset - class that extracts patches from training dataset
+                > EvalDataset - class that extract patches from evaluating dataset
+                > Metrics - class that holds metrics specified for our task
+                > loss function - function that holds loss functions implemented for our task.
 """
 
 
@@ -27,7 +33,6 @@ import configuration as cfg
 class Average(object):
     """
     This class computes and stores the average and current value.
-
     """
     def __init__(self):
         self.val = 0
@@ -44,8 +49,7 @@ class Average(object):
 
 class TrainDataset(Dataset):
     """
-    This class extract patches from training dataset.
-
+    This class extracts patches from training dataset.
     """
 
     def __init__(self, data, transform=None, normalize=None):
@@ -82,7 +86,6 @@ class TrainDataset(Dataset):
 class EvalDataset(Dataset):
     """
     This class extract patches from evaluating dataset.
-
     """
 
     def __init__(self, data, transforms=None):
@@ -115,8 +118,7 @@ class Metrics:
         > accuracy
         > sensitivity, specificity, precision, recall
         > IOU, dice coefficient
-        > confusion matrix
-
+        > confusion matrix.
     """
 
     def __init__(self, num_classes):
@@ -191,8 +193,8 @@ class Metrics:
 
 def loss_functions():
     """
-    This
-    Currenty are implemented these loss functions:
+    This function declares and holds all implemented loss functions.
+    Currenty, these loss functions are implemented:
 
         > focal loss
         > cross-entropy loss

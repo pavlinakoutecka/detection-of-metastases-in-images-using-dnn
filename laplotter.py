@@ -42,6 +42,7 @@ import warnings
 import math
 from collections import OrderedDict
 
+
 def ignore_nan_and_inf(value, label, x_index):
     """Helper function that creates warnings on NaN/INF and converts them to None.
     Args:
