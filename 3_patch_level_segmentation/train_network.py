@@ -225,7 +225,6 @@ def find_random_samples():
             else:
                 outputs = model(patches)['out']
 
-
             # apply softmax function
             outputs = torch.nn.functional.softmax(outputs, dim=1)
 
@@ -373,10 +372,6 @@ def train_epoch(epoch):
         patches, masks = data
         patches = patches.to(device)
         masks = masks.to(device)
-
-        # if batch_idx == 0:
-        #     img = patches[3].permute(1,2,0).cpu().numpy()
-        #     plt.imsave("aug_hsv.png", img)
 
         # zero gradients
         optimizer.zero_grad()

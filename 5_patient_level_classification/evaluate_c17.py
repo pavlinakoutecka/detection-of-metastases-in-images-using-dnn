@@ -105,7 +105,10 @@ def predict_stage():
     final_stages = []
 
     # prepare the first patient and array to store tumor type predictions of all his slides
-    current_patient = 'patient_100'
+    if args.data == 'c17_train':
+        current_patient = 'patient_000'
+    if args.data == 'c17_test':
+        current_patient = 'patient_100'
     current_patient_predictions = []
 
     # run the cycle for all the patients and their slides

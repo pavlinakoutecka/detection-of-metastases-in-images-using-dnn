@@ -27,7 +27,7 @@ class hyperparameter:
     seed = 1
 
     # downsampling level parameters
-    patch_level = 1
+    patch_level = 2
     mask_level = 5
 
     # patch extraction parameters
@@ -38,8 +38,8 @@ class hyperparameter:
 
     # train parameters
     split_ratio = 1
-    batch_size = 32  # training ... 16, evaluating ... 128
-    learning_rate = 1e-5
+    batch_size = 16  # training ... 16, evaluating ... 128
+    learning_rate = 5e-6
     # =========
     num_classes = 2
     classes = ['No Tumor', 'Tumor']
@@ -48,14 +48,14 @@ class hyperparameter:
 
     # storage parameters
     environment = 'server'  # 'server' or 'cluster'
-    save_run = True
+    save_run = False
     # =========
     date = now.strftime("%d_%m-%H_%M_%S")
     saving_string = f'__ps{str(patch_size)}__sr{str(split_ratio)}__{date}'
     saving_folder = '/mnt/datagrid/personal/koutepa2/bakprac/' if environment == 'server' else '/home/koutepa2/bakprac/'
 
     # net parameters
-    model = 'fcn_resnet50'  # 'deeplabv3_resnet101' or 'fcn_resnet50' or 'unet_resnet50' or 'resnet50'
+    model = 'deeplabv3_resnet101'  # 'deeplabv3_resnet101' or 'fcn_resnet50' or 'unet_resnet50' or 'resnet50'
     trained_weights = False
     # trained_weights = saving_folder + f'Models/{model}/lvl_{str(patch_level)}/ep2__ps256__sr1__11_04-11_41_49.pt'
     #   level 1: ep0__ps256__sr1__10_04-11_35_35.pt
@@ -137,8 +137,8 @@ class path(hyperparameter):
     final_labels = hyperparameter.saving_folder + f'Datasets/labels_lvl_{str(hyperparameter.patch_level)}.csv'
 
     # demo slide path
-    demo_slide = source_folder + 'CAMELYON16/testing/Test_010.tif'  # slide used for testing
-    demo_xml = source_folder + 'CAMELYON16/Annotations/test_010.xml'  # xml used for testing
+    demo_slide = source_folder + 'CAMELYON16/testing/Test_090.tif'  # slide used for testing
+    demo_xml = source_folder + 'CAMELYON16/Annotations/test_090.xml'  # xml used for testing
 
 
 class wsi:
