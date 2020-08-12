@@ -153,8 +153,8 @@ def train_xgboost():
             print(cm)
             print(classification_report(labels_test, xgb_classifier.predict(features_test)))
 
-            plot_utils.plot_confusion_matrix(cm=cm, normalize=False, path=cfg.path.graphs + f'confusion_matrix_train_classifier_xgboost_{index}fold.png',
-                                             title=f"Confusion matrix for the {index}. fold in the 5-fold cross validation", cmap=None,
+            plot_utils.plot_confusion_matrix(cm=cm, normalize=False, path=cfg.path.graphs + f'confusion_matrix_train_classifier_xgboost_{index}fold.pdf',
+                                             title=f"Confusion matrix for the {index}. fold", cmap=None,
                                              target_names=['Negative', 'ITC', 'Micro', 'Macro'])
             index += 1
 
@@ -244,8 +244,8 @@ def train_random_forest():
             print(cm)
             print(classification_report(labels_test, rf_classifier.predict(features_test)))
 
-            plot_utils.plot_confusion_matrix(cm=cm, normalize=False, path=cfg.path.graphs + f'confusion_matrix_train_classifier_random_forest_{index}fold.png',
-                                             title=f"Confusion matrix for the {index}. fold in the 5-fold cross validation", cmap=None,
+            plot_utils.plot_confusion_matrix(cm=cm, normalize=False, path=cfg.path.graphs + f'confusion_matrix_train_classifier_random_forest_{index}fold.pdf',
+                                             title=f"Confusion matrix for the {index}. fold", cmap=None,
                                              target_names=['Negative', 'ITC', 'Micro', 'Macro'])
             index += 1
 

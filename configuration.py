@@ -48,7 +48,7 @@ class hyperparameter:
 
     # storage parameters
     environment = 'server'  # 'server' or 'cluster'
-    save_run = False
+    save_run = True
     # =========
     date = now.strftime("%d_%m-%H_%M_%S")
     saving_string = f'__ps{str(patch_size)}__sr{str(split_ratio)}__{date}'
@@ -57,9 +57,14 @@ class hyperparameter:
     # net parameters
     model = 'deeplabv3_resnet101'  # 'deeplabv3_resnet101' or 'fcn_resnet50' or 'unet_resnet50' or 'resnet50'
     trained_weights = False
-    # trained_weights = saving_folder + f'Models/{model}/lvl_{str(patch_level)}/ep2__ps256__sr1__11_04-11_41_49.pt'
-    #   level 1: ep0__ps256__sr1__10_04-11_35_35.pt
-    #   level 2: ep1__ps256__sr1__11_04-11_41_49.pt, ep2__ps256__sr1__11_04-11_41_49.pt
+    # trained_weights = saving_folder + f'Models/{model}/lvl_{str(patch_level)}/TRAINED_WEIGHTS'
+    #   DeepLab level 1: ep0__ps256__sr1__10_04-11_35_35.pt
+    #   DeepLab level 2: ep2__ps256__sr1__11_04-11_41_49.pt
+    #   FCN level 1: ep3__ps256__sr1__06_08-17_35_54.pt
+    #   FCN level 2: ep3__ps256__sr1__06_08-17_31_54.pt
+    #   UNet level 1: ep4__ps256__sr1__06_08-17_32_59.pt
+    #   UNet level 2: ep9__ps256__sr1__06_08-17_33_56.pt
+    #   ResNet-50: '/mnt/medical/microscopy/patch_camelyon/nets_bakproj/trained_models/20193112-095359__resnet50trans___FINAL_MODEL/20193112-095359__resnet50trans__ep__33.pt'
     model_titles_dictionary = {
         'deeplabv3_resnet101': 'DeepLabV3 with a ResNet-101 backbone',
         'fcn_resnet50': 'Fully Convolutional Network with a ResNet-50 backbone',

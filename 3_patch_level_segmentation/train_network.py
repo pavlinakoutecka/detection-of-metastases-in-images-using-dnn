@@ -549,7 +549,7 @@ def process_of_training():
             df = pd.DataFrame({'axis': val_axis, 'loss': val_loss_global})
             df.to_csv(cfg.path.graphs + f'ep{str(epoch)}__val_loss' + cfg.hyperparameter.saving_string + '.csv', header=False, index=False)
 
-            # plot loss curve to .png file
+            # plot loss curve to .pdf file
             plt.figure()
             plt.plot(train_axis, train_loss_global, "b-", label='training loss')
             plt.plot(val_axis, val_loss_global, "r-", label='validation loss')
@@ -602,8 +602,8 @@ def process_of_evaluation():
 
     # plot confusion matrix to .pdf file
     if cfg.hyperparameter.save_run:
-        plot_utils.plot_confusion_matrix(cm=confusion_matrix, normalize=False, path=cfg.path.graphs + f'confusion_matrix' + cfg.hyperparameter.saving_string + '.pdf',
-                                         title="Confusion matrix", cmap=None, target_names=cfg.hyperparameter.classes)
+        plot_utils.plot_confusion_matrix(cm=confusion_matrix, normalize=False, path=cfg.path.graphs + f'confusion_matrix' + '.pdf',
+                                         title=f"Confusion matrix for the {cfg.hyperparameter.model_title}", cmap=None, target_names=cfg.hyperparameter.classes)
 
 
 if __name__ == "__main__":

@@ -173,14 +173,12 @@ class Metrics:
         accuracy, sensitivity, specificity, precision, recall, iou, dice_coefficient, confusion_matrix = self.compute()
 
         print("Confusion matrix:\n", confusion_matrix)
-        for item in range(self.num_classes):
-            print(f"Class: {str(cfg.hyperparameter.classes[item]):10s}\t"
-                  f"Sensitivity: {sensitivity[item]:.5f}\t"
-                  f"Specificity: {specificity[item]:.5f}\t"
-                  f"Precision: {precision[item]:.5f}\t"
-                  f"Recall: {recall[item]:.5f} \t"
-                  f"IOU: {iou[item]:.5f}\t"
-                  f"Dice coefficient: {dice_coefficient[item]:.5f}")
+        print(f"\nSensitivity: {sensitivity[0]:.5f}\t"
+              f"Specificity: {specificity[0]:.5f}\t"
+              f"Precision: {precision[0]:.5f}\t"
+              f"Recall: {recall[0]:.5f} \t"
+              f"IOU: {iou[0]:.5f}\t"
+              f"Dice coefficient: {dice_coefficient[0]:.5f}")
 
     def reset(self):
 

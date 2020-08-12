@@ -42,13 +42,10 @@ def plot_confusion_matrix(cm, target_names, path, title='Confusion matrix', cmap
         https://www.kaggle.com/grfiv4/plot-a-confusion-matrix
     """
 
-    accuracy = np.trace(cm) / float(np.sum(cm))
-    misclass = 1 - accuracy
-
     if cmap is None:
         cmap = plt.get_cmap('Blues')
 
-    plt.figure(figsize=(8, 7))
+    plt.figure(figsize=(6, 4))
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
     plt.colorbar()
@@ -74,7 +71,7 @@ def plot_confusion_matrix(cm, target_names, path, title='Confusion matrix', cmap
 
     plt.ylim([3.5, -0.5])  # [1.5, -0.5]
     plt.ylabel('True label')
-    plt.xlabel('Predicted label\n\naccuracy={:0.4f} ; misclass={:0.4f}'.format(accuracy, misclass))
+    plt.xlabel('Predicted label')
     plt.savefig(path)
     plt.show()
 

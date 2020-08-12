@@ -199,6 +199,9 @@ def val_epoch(val_loader, model, criterion, epoch, val_loss, val_acc, val_axis):
 
             losses.update(loss.data.cpu().numpy(), labels.size(0))
 
+            # calculate metrics (accuracy, precision, recall, iou, dice coefficient, confusion matrix)
+            metrics.update(outputs, labels)
+
             # save predicted to compute accuracy
             if batch_idx == 0:
                 out = predicted.data.cpu().numpy()
@@ -306,6 +309,100 @@ def train_process(epochs, train_loader, val_loader):
         plt.legend(loc="lower right")
         plt.savefig('./graphs/' + 'roc_curve' + str(epoch) + '.png')
         plt.show()
+# ------------------------------------------------------------------------------------------------
+
+
+# EVALUATING THE MODEL ---------------------------------------------------------------------------
+
+# test and evaluate the model
+def validate_epoch():
+
+    # start and compute estimated time till the end of the epoch
+    start_time = time.time()
+    remaining_seconds = None
+
+    # object to store & plot the losses
+    losses = train_utils.Average()
+
+    # switch to evaluation mode (turning off gradients to speed up)
+    model.eval()
+    with torch.no_grad():
+
+        # mini-batches
+        for batch_idx, data in enumerate(loader_val):
+
+            images, labels = data
+            images = images.to(device)
+            labels = labels.to(device)
+
+            # forward + backward + optimize
+            outputs = model(images)
+            probability = torch.nn.functional.softmax(outputs, dim=1)  # recompute probabilities from the outputs
+            loss = criterion(outputs, labels)
+            _, predicted = torch.max(outputs, 1)
+
+            losses.update(loss.data.cpu().numpy(), labels.size(0))
+
+            # save predicted to compute accuracy
+            if batch_idx == 0:
+                out = predicted.data.cpu().numpy()
+                label = labels.cpu().numpy()
+                prob = probability[:, 1].cpu().numpy()
+            else:
+                out = np.concatenate((out, predicted.data.cpu().numpy()), axis=0)  # predicted
+                label = np.concatenate((label, labels.cpu().numpy()), axis=0)  # true
+                prob = np.concatenate((prob, probability[:, 1].cpu().numpy()), axis=0)  # predicted probability of '1'
+
+            # compute estimated time till the end of epoch
+            if batch_idx % 10 == 0 and batch_idx != 0:
+                stop_time = time.time()
+                remaining_seconds = (stop_time - start_time) * (len(loader_val) - batch_idx) / 10
+                start_time = time.time()
+
+            # print info
+            utils.visualize_progress(batch_idx, len(loader_val), remaining_seconds)
+
+        # evaluate ROC
+        fpr, tpr, _ = roc_curve(label, prob)  # input: real labels, probability of '1'
+        roc_auc = auc(fpr, tpr)
+
+        # evaluate accuracy
+        acc = np.sum(out == label)/len(out)
+
+        # evaluate confusion matrix
+        cm = confusion_matrix(label, out)
+
+        # return acc and loss as the validation outcome
+        return losses.avg, acc, cm, roc_auc, fpr, tpr
+
+
+def process_of_evaluation():
+
+    # compute an evaluation epoch
+    loss, accuracy, confusion_matrix, roc_auc_score, fp_rate, tp_rate = validate_epoch()
+
+    # print evaluation info
+    print("\n ACCURACY: {}\t LOSS: {}\n".format(accuracy, loss))
+
+    # plot confusion matrix to .pdf file
+    if cfg.hyperparameter.save_run:
+        plot_utils.plot_confusion_matrix(cm=confusion_matrix, normalize=False, path=cfg.path.graphs + f'confusion_matrix' + '.pdf',
+                                         title=f"Confusion matrix for the {cfg.hyperparameter.model_title}", cmap=None, target_names=cfg.hyperparameter.classes)
+
+    # plot ROC curve to .pdf file
+    plt.figure()
+    plt.figure(figsize=(6.5, 4))
+    plt.plot(fp_rate, tp_rate, color='royalblue', lw=2, label='ROC curve (area = %0.4f)' % roc_auc_score)
+    plt.plot([0, 1], [0, 1], color='black', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.grid(True)
+    plt.title(f'ROC curve for the {cfg.hyperparameter.model_title}')
+    plt.legend(loc="lower right")
+    plt.savefig(cfg.path.graphs + 'roc_curve.pdf')
+    plt.show()
 # ------------------------------------------------------------------------------------------------
 
 
@@ -420,7 +517,8 @@ if __name__ == '__main__':
     batch_size = 64
     learning_rate = 0.0003
     training = False  # 'True' if training the model should be happening
-    finding_lr = True  # 'True' if finding the optimal learning rate should be happening
+    evaluating = True  # 'True' if evaluating the model should be happening
+    finding_lr = False  # 'True' if finding the optimal learning rate should be happening
 
     # data transforms
     train_transforms = transforms.Compose([
@@ -466,6 +564,12 @@ if __name__ == '__main__':
         print("Starting process of training...")
         train_process(epochs, loader_train, loader_val)
         print("Process of training is done!")
+
+    # evaluating process
+    if evaluating:
+        print("Starting process of evaluation...")
+        process_of_evaluation()
+        print("Process of evaluation is done!")
 
     # learning rate searching process
     if finding_lr:
